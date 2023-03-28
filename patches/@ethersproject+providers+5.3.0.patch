@@ -1,0 +1,107 @@
+diff --git a/node_modules/@ethersproject/providers/src.ts/web3-provider.ts b/node_modules/@ethersproject/providers/src.ts/web3-provider.ts
+index 4810bd8..96a0ffa 100644
+--- a/node_modules/@ethersproject/providers/src.ts/web3-provider.ts
++++ b/node_modules/@ethersproject/providers/src.ts/web3-provider.ts
+@@ -133,54 +133,57 @@ function buildEip1193Fetcher(provider: ExternalProvider): JsonRpcFetchFunc {
+     }
+ }
+ 
+-export class Web3Provider extends JsonRpcProvider {
+-    readonly provider: ExternalProvider;
+-    readonly jsonRpcFetchFunc: JsonRpcFetchFunc;
++export {Web3Provider} from "zksync-web3"
+ 
+-    constructor(provider: ExternalProvider | JsonRpcFetchFunc, network?: Networkish) {
+-        logger.checkNew(new.target, Web3Provider);
+ 
+-        if (provider == null) {
+-            logger.throwArgumentError("missing provider", "provider", provider);
+-        }
++// export class Web3Provider extends JsonRpcProvider {
++//     readonly provider: ExternalProvider;
++//     readonly jsonRpcFetchFunc: JsonRpcFetchFunc;
+ 
+-        let path: string = null;
+-        let jsonRpcFetchFunc: JsonRpcFetchFunc = null;
+-        let subprovider: ExternalProvider = null;
+-
+-        if (typeof(provider) === "function") {
+-            path = "unknown:";
+-            jsonRpcFetchFunc = provider;
+-
+-        } else {
+-            path = provider.host || provider.path || "";
+-            if (!path && provider.isMetaMask) {
+-                path = "metamask";
+-            }
+-
+-            subprovider = provider;
+-
+-            if (provider.request) {
+-                if (path === "") { path = "eip-1193:"; }
+-                jsonRpcFetchFunc = buildEip1193Fetcher(provider);
+-            } else if (provider.sendAsync) {
+-                jsonRpcFetchFunc = buildWeb3LegacyFetcher(provider, provider.sendAsync.bind(provider));
+-            } else if (provider.send) {
+-                jsonRpcFetchFunc = buildWeb3LegacyFetcher(provider, provider.send.bind(provider));
+-            } else {
+-                logger.throwArgumentError("unsupported provider", "provider", provider);
+-            }
+-
+-            if (!path) { path = "unknown:"; }
+-        }
++//     constructor(provider: ExternalProvider | JsonRpcFetchFunc, network?: Networkish) {
++//         logger.checkNew(new.target, Web3Provider);
+ 
+-        super(path, network);
++//         if (provider == null) {
++//             logger.throwArgumentError("missing provider", "provider", provider);
++//         }
+ 
+-        defineReadOnly(this, "jsonRpcFetchFunc", jsonRpcFetchFunc);
+-        defineReadOnly(this, "provider", subprovider);
+-    }
++//         let path: string = null;
++//         let jsonRpcFetchFunc: JsonRpcFetchFunc = null;
++//         let subprovider: ExternalProvider = null;
+ 
+-    send(method: string, params: Array<any>): Promise<any> {
+-        return this.jsonRpcFetchFunc(method, params);
+-    }
+-}
++//         if (typeof(provider) === "function") {
++//             path = "unknown:";
++//             jsonRpcFetchFunc = provider;
++
++//         } else {
++//             path = provider.host || provider.path || "";
++//             if (!path && provider.isMetaMask) {
++//                 path = "metamask";
++//             }
++
++//             subprovider = provider;
++
++//             if (provider.request) {
++//                 if (path === "") { path = "eip-1193:"; }
++//                 jsonRpcFetchFunc = buildEip1193Fetcher(provider);
++//             } else if (provider.sendAsync) {
++//                 jsonRpcFetchFunc = buildWeb3LegacyFetcher(provider, provider.sendAsync.bind(provider));
++//             } else if (provider.send) {
++//                 jsonRpcFetchFunc = buildWeb3LegacyFetcher(provider, provider.send.bind(provider));
++//             } else {
++//                 logger.throwArgumentError("unsupported provider", "provider", provider);
++//             }
++
++//             if (!path) { path = "unknown:"; }
++//         }
++
++//         super(path, network);
++
++//         defineReadOnly(this, "jsonRpcFetchFunc", jsonRpcFetchFunc);
++//         defineReadOnly(this, "provider", subprovider);
++//     }
++
++//     send(method: string, params: Array<any>): Promise<any> {
++//         return this.jsonRpcFetchFunc(method, params);
++//     }
++// }
